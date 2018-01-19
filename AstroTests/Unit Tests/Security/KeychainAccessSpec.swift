@@ -22,21 +22,21 @@ class KeychainAccessSpec: QuickSpec {
             var testKey = "AccessKey"
             
             afterEach {
-                _ = keychain.delete(testKey, accessibleAttribute: .WhenUnlocked)
+                _ = keychain.delete(testKey, accessibleAttribute: .whenUnlocked)
             }
 
             context("and you want it available when unlocked") {
 
                 it("returns nil for retrieving a key that doesn't exist") {
-                    let storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    let storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedString).to(beNil())
                 }
 
                 it("can store and retrieve a string") {
                     let testString = "something really boring"
-                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .whenUnlocked)
 
-                    let storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    let storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedString).to(equal(testString))
                 }
 
@@ -47,24 +47,24 @@ class KeychainAccessSpec: QuickSpec {
                         return
                     }
                     let testData = try! Data(contentsOf: testFilePath)
-                    _ = keychain.put(testKey, data: testData, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.put(testKey, data: testData, accessibleAttribute: .whenUnlocked)
 
-                    let storedData = keychain.get(testKey, accessibleAttribute: .WhenUnlocked)
+                    let storedData = keychain.get(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedData).toNot(beNil())
                     expect(storedData).to(equal(testData))
                 }
 
                 it("can set a string value to nil") {
-                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .whenUnlocked)
 
-                    let storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    let storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedString).to(beNil())
                 }
 
                 it("can set a data value to nil") {
-                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .whenUnlocked)
 
-                    let storedData = keychain.get(testKey, accessibleAttribute: .WhenUnlocked)
+                    let storedData = keychain.get(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedData).to(beNil())
                 }
 
@@ -94,22 +94,22 @@ class KeychainAccessSpec: QuickSpec {
                     let origString = "exciting stuff?"
                     let finalString = "boring stuff?"
 
-                    _ = keychain.putString(testKey, value: origString, accessibleAttribute: .WhenUnlocked)
-                    let storedOrigString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.putString(testKey, value: origString, accessibleAttribute: .whenUnlocked)
+                    let storedOrigString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedOrigString).to(equal(origString))
 
-                    _ = keychain.putString(testKey, value: finalString, accessibleAttribute: .WhenUnlocked)
-                    let storedFinalString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.putString(testKey, value: finalString, accessibleAttribute: .whenUnlocked)
+                    let storedFinalString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedFinalString).to(equal(finalString))
                 }
 
                 it("can delete a value") {
                     let testString = "exciting stuff?"
-                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .WhenUnlocked)
-                    let storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
-                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .whenUnlocked)
+                    let storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
+                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .whenUnlocked)
 
-                    let storedNil = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    let storedNil = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedString).to(equal(testString))
                     expect(storedNil).to(beNil())
                 }
@@ -117,14 +117,14 @@ class KeychainAccessSpec: QuickSpec {
                 it("can delete all keys and data for the app") {
                     // Push in a key/data element and verify it exists
                     let testString = "exciting stuff?"
-                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .WhenUnlocked)
-                    var storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .whenUnlocked)
+                    var storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedString).to(equal(testString))
 
                     // Delete everything and then verify you can't access the key/data any more
                     let status = keychain.deleteAllKeysAndDataForApp()
                     expect(status).to(beTrue())
-                    storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedString).to(beNil())
                 }
 
@@ -133,13 +133,13 @@ class KeychainAccessSpec: QuickSpec {
                     let testString = "you can't see me"
 
                     // Push in a key/data element and verify it exists in the main account
-                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .WhenUnlocked)
-                    var storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .whenUnlocked)
+                    var storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedString).to(equal(testString))
                     
                     // Try to gain access to a key from another account
                     let otherKeychain = KeychainAccess(account: "SomeOtherAccount@RobotsAndPencils.com")
-                    storedString = otherKeychain.getString(testKey, accessibleAttribute: .WhenUnlocked)
+                    storedString = otherKeychain.getString(testKey, accessibleAttribute: .whenUnlocked)
                     expect(storedString).to(beNil())
                 }
             }
@@ -148,9 +148,9 @@ class KeychainAccessSpec: QuickSpec {
 
                 it("can store and retrieve a string") {
                     let testString = "something really boring"
-                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .whenUnlockedThisDeviceOnly)
 
-                    let storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    let storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedString).to(equal(testString))
                 }
 
@@ -161,24 +161,24 @@ class KeychainAccessSpec: QuickSpec {
                         return
                     }
                     let testData = try! Data(contentsOf: testFilePath)
-                    _ = keychain.put(testKey, data: testData, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.put(testKey, data: testData, accessibleAttribute: .whenUnlockedThisDeviceOnly)
 
-                    let storedData = keychain.get(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    let storedData = keychain.get(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedData).toNot(beNil())
                     expect(storedData).to(equal(testData))
                 }
 
                 it("can set a string value to nil") {
-                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .whenUnlockedThisDeviceOnly)
 
-                    let storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    let storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedString).to(beNil())
                 }
 
                 it("can set a data value to nil") {
-                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .whenUnlockedThisDeviceOnly)
 
-                    let storedData = keychain.get(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    let storedData = keychain.get(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedData).to(beNil())
                 }
 
@@ -186,22 +186,22 @@ class KeychainAccessSpec: QuickSpec {
                     let origString = "exciting stuff?"
                     let finalString = "boring stuff?"
 
-                    _ = keychain.putString(testKey, value: origString, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
-                    let storedOrigString = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: origString, accessibleAttribute: .whenUnlockedThisDeviceOnly)
+                    let storedOrigString = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedOrigString).to(equal(origString))
 
-                    _ = keychain.putString(testKey, value: finalString, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
-                    let storedFinalString = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: finalString, accessibleAttribute: .whenUnlockedThisDeviceOnly)
+                    let storedFinalString = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedFinalString).to(equal(finalString))
                 }
 
                 it("can delete a value") {
                     let testString = "exciting stuff?"
-                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
-                    let storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
-                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .whenUnlockedThisDeviceOnly)
+                    let storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: nil, accessibleAttribute: .whenUnlockedThisDeviceOnly)
 
-                    let storedNil = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    let storedNil = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedString).to(equal(testString))
                     expect(storedNil).to(beNil())
                 }
@@ -209,14 +209,14 @@ class KeychainAccessSpec: QuickSpec {
                 it("can delete all keys and data for the app") {
                     // Push in a key/data element and verify it exists
                     let testString = "exciting stuff?"
-                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
-                    var storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .whenUnlockedThisDeviceOnly)
+                    var storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedString).to(equal(testString))
 
                     // Delete everything and then verify you can't access the key/data any more
                     let status = keychain.deleteAllKeysAndDataForApp()
                     expect(status).to(beTrue())
-                    storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedString).to(beNil())
                 }
 
@@ -225,13 +225,13 @@ class KeychainAccessSpec: QuickSpec {
                     let testString = "you can't see me"
 
                     // Push in a key/data element and verify it exists in the main account
-                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
-                    var storedString = keychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    _ = keychain.putString(testKey, value: testString, accessibleAttribute: .whenUnlockedThisDeviceOnly)
+                    var storedString = keychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedString).to(equal(testString))
                     
                     // Try to gain access to a key from another account
                     let otherKeychain = KeychainAccess(account: "SomeOtherAccount@RobotsAndPencils.com")
-                    storedString = otherKeychain.getString(testKey, accessibleAttribute: .WhenUnlockedThisDeviceOnly)
+                    storedString = otherKeychain.getString(testKey, accessibleAttribute: .whenUnlockedThisDeviceOnly)
                     expect(storedString).to(beNil())
                 }
             }
@@ -240,51 +240,51 @@ class KeychainAccessSpec: QuickSpec {
         describe("A KeychainAccessibleAttribute") {
 
             context("when unlocked") {
-                let attribute = KeychainAccessibleAttribute.WhenUnlocked
+                let attribute = KeychainAccessibleAttribute.whenUnlocked
                 it("should return kSecAttrAccessibleWhenUnlocked") {
-                    expect(String(attribute.secAttrValue())).to(equal(String(kSecAttrAccessibleWhenUnlocked)))
+                    expect(String(attribute.secAttrValue)).to(equal(String(kSecAttrAccessibleWhenUnlocked)))
                 }
             }
 
             context("when after first unlock") {
-                let attribute = KeychainAccessibleAttribute.AfterFirstUnlock
+                let attribute = KeychainAccessibleAttribute.afterFirstUnlock
                 it("should return kSecAttrAccessibleAfterFirstUnlock") {
-                    expect(String(attribute.secAttrValue())).to(equal(String(kSecAttrAccessibleAfterFirstUnlock)))
+                    expect(String(attribute.secAttrValue)).to(equal(String(kSecAttrAccessibleAfterFirstUnlock)))
                 }
             }
 
             context("when always") {
-                let attribute = KeychainAccessibleAttribute.Always
+                let attribute = KeychainAccessibleAttribute.always
                 it("should return kSecAttrAccessibleAlways") {
-                    expect(String(attribute.secAttrValue())).to(equal(String(kSecAttrAccessibleAlways)))
+                    expect(String(attribute.secAttrValue)).to(equal(String(kSecAttrAccessibleAlways)))
                 }
             }
 
             context("when passcode set this device only") {
-                let attribute = KeychainAccessibleAttribute.WhenPasscodeSetThisDeviceOnly
+                let attribute = KeychainAccessibleAttribute.whenPasscodeSetThisDeviceOnly
                 it("should return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly") {
-                    expect(String(attribute.secAttrValue())).to(equal(String(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly)))
+                    expect(String(attribute.secAttrValue)).to(equal(String(kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly)))
                 }
             }
 
             context("when unlocked this device only") {
-                let attribute = KeychainAccessibleAttribute.WhenUnlockedThisDeviceOnly
+                let attribute = KeychainAccessibleAttribute.whenUnlockedThisDeviceOnly
                 it("should return kSecAttrAccessibleWhenUnlockedThisDeviceOnly") {
-                    expect(String(attribute.secAttrValue())).to(equal(String(kSecAttrAccessibleWhenUnlockedThisDeviceOnly)))
+                    expect(String(attribute.secAttrValue)).to(equal(String(kSecAttrAccessibleWhenUnlockedThisDeviceOnly)))
                 }
             }
 
             context("when after first unlock this device only") {
-                let attribute = KeychainAccessibleAttribute.AfterFirstUnlockThisDeviceOnly
+                let attribute = KeychainAccessibleAttribute.afterFirstUnlockThisDeviceOnly
                 it("should return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly") {
-                    expect(String(attribute.secAttrValue())).to(equal(String(kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly)))
+                    expect(String(attribute.secAttrValue)).to(equal(String(kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly)))
                 }
             }
 
             context("when always this device only") {
-                let attribute = KeychainAccessibleAttribute.AlwaysThisDeviceOnly
+                let attribute = KeychainAccessibleAttribute.alwaysThisDeviceOnly
                 it("should return kSecAttrAccessibleAlwaysThisDeviceOnly") {
-                    expect(String(attribute.secAttrValue())).to(equal(String(kSecAttrAccessibleAlwaysThisDeviceOnly)))
+                    expect(String(attribute.secAttrValue)).to(equal(String(kSecAttrAccessibleAlwaysThisDeviceOnly)))
                 }
             }
         }

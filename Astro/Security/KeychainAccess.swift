@@ -24,29 +24,29 @@ let KeychainAccessServiceBundleID: String = {
 let KeychainAccessErrorDomain = "\(KeychainAccessServiceBundleID).error"
 
 public enum KeychainAccessibleAttribute {
-    case WhenUnlocked
-    case AfterFirstUnlock
-    case Always
-    case WhenPasscodeSetThisDeviceOnly
-    case WhenUnlockedThisDeviceOnly
-    case AfterFirstUnlockThisDeviceOnly
-    case AlwaysThisDeviceOnly
+    case whenUnlocked
+    case afterFirstUnlock
+    case always
+    case whenPasscodeSetThisDeviceOnly
+    case whenUnlockedThisDeviceOnly
+    case afterFirstUnlockThisDeviceOnly
+    case alwaysThisDeviceOnly
 
-    func secAttrValue() -> CFString {
+    var secAttrValue: CFString {
         switch self {
-        case .WhenUnlocked:
+        case .whenUnlocked:
             return kSecAttrAccessibleWhenUnlocked
-        case .AfterFirstUnlock:
+        case .afterFirstUnlock:
             return kSecAttrAccessibleAfterFirstUnlock
-        case .Always:
+        case .always:
             return kSecAttrAccessibleAlways
-        case .WhenPasscodeSetThisDeviceOnly:
+        case .whenPasscodeSetThisDeviceOnly:
             return kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly
-        case .WhenUnlockedThisDeviceOnly:
+        case .whenUnlockedThisDeviceOnly:
             return kSecAttrAccessibleWhenUnlockedThisDeviceOnly
-        case .AfterFirstUnlockThisDeviceOnly:
+        case .afterFirstUnlockThisDeviceOnly:
             return kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-        case .AlwaysThisDeviceOnly:
+        case .alwaysThisDeviceOnly:
             return kSecAttrAccessibleAlwaysThisDeviceOnly
         }
     }
@@ -74,7 +74,7 @@ open class KeychainAccess {
        - parameter key: the key to find the string in the keychain
        - returns: the value stored for that key as a string. nil if there is no value or the value is not a string
     */
-    open func getString(_ key: String, accessibleAttribute: KeychainAccessibleAttribute = .WhenUnlocked) -> String? {
+    open func getString(_ key: String, accessibleAttribute: KeychainAccessibleAttribute = .whenUnlocked) -> String? {
         guard let data = self.get(key, accessibleAttribute: accessibleAttribute) else {
             return nil
         }
@@ -87,7 +87,7 @@ open class KeychainAccess {
        - parameter key: the key to find the data in the keychain
        - returns: the value stored for that key as NSData. nil if there is no value or the value is not NSData
     */
-    open func get(_ key: String, accessibleAttribute: KeychainAccessibleAttribute = .WhenUnlocked) -> Data? {
+    open func get(_ key: String, accessibleAttribute: KeychainAccessibleAttribute = .whenUnlocked) -> Data? {
         let query = self.query(key, get: true, accessibleAttribute: accessibleAttribute)
         
         var result: AnyObject?
@@ -112,7 +112,7 @@ open class KeychainAccess {
        - parameter value: the string to store in the keychain (if nil then no data will be stored for the key)
        - returns: true if the store was successful, false if there was an error
     */
-    open func putString(_ key: String, value: String?, accessibleAttribute: KeychainAccessibleAttribute = .WhenUnlocked) -> Bool {
+    open func putString(_ key: String, value: String?, accessibleAttribute: KeychainAccessibleAttribute = .whenUnlocked) -> Bool {
         return self.put(key, data: value?.data(using: String.Encoding.utf8), accessibleAttribute: accessibleAttribute)
     }
     
@@ -123,7 +123,7 @@ open class KeychainAccess {
        - parameter value: the data to store in the keychain (if nil then no data will be stored for the key)
        - returns: true if the store was successful, false if there was an error
     */
-    open func put(_ key: String, data: Data?, accessibleAttribute: KeychainAccessibleAttribute = .WhenUnlocked) -> Bool {
+    open func put(_ key: String, data: Data?, accessibleAttribute: KeychainAccessibleAttribute = .whenUnlocked) -> Bool {
         let query = self.query(key, value: data as AnyObject?, accessibleAttribute: accessibleAttribute)
         var result: AnyObject?
         
@@ -171,7 +171,7 @@ open class KeychainAccess {
        - parameter key: the key to delete the data for in the keychain
        - returns: true if the delete was successful, false if there was an error
     */
-    open func delete(_ key: String, accessibleAttribute: KeychainAccessibleAttribute = .WhenUnlocked) -> Bool {
+    open func delete(_ key: String, accessibleAttribute: KeychainAccessibleAttribute = .whenUnlocked) -> Bool {
         let query = self.query(key, accessibleAttribute: accessibleAttribute)
         let status = SecItemDelete(query)
 
@@ -203,21 +203,21 @@ open class KeychainAccess {
 
     open subscript(key: String) -> String? {
         get {
-            return self.getString(key, accessibleAttribute: .WhenUnlocked)
+            return self.getString(key, accessibleAttribute: .whenUnlocked)
         }
 
         set {
-            _ = self.putString(key, value: newValue, accessibleAttribute: .WhenUnlocked)
+            _ = self.putString(key, value: newValue, accessibleAttribute: .whenUnlocked)
         }
     }
 
     open subscript(data key: String) -> Data? {
         get {
-            return self.get(key, accessibleAttribute: .WhenUnlocked)
+            return self.get(key, accessibleAttribute: .whenUnlocked)
         }
 
         set {
-            _ = self.put(key, data: newValue, accessibleAttribute: .WhenUnlocked)
+            _ = self.put(key, data: newValue, accessibleAttribute: .whenUnlocked)
         }
     }
 
@@ -234,7 +234,7 @@ open class KeychainAccess {
         var query: [String: AnyObject] = [:]
         query[kSecAttrService as String] = key as AnyObject?
         query[kSecAttrAccount as String] = self.keychainAccessAccount as AnyObject?
-        query[kSecAttrAccessible as String] = accessibleAttribute.secAttrValue()
+        query[kSecAttrAccessible as String] = accessibleAttribute.secAttrValue
         query[kSecClass as String] = kSecClassGenericPassword
         
         if let value = value {
